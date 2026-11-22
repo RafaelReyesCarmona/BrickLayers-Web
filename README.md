@@ -1,11 +1,11 @@
 <img src="bricklayers.png" width=48 height=48 align=right>
 
 # BrickLayers Web
-[<img src="img/bricklayers-lines.svg" width="16">](README.md)
 [![Version: v0.1](https://img.shields.io/badge/Version-v0.1-blue?style=for-the-badge&logo=v)]()
 <a href="https://github.com/pedromxavier/flag-badges">
     <img src="https://raw.githubusercontent.com/pedromxavier/flag-badges/main/badges/ES.svg" alt="made in ES">
 </a>&nbsp;
+
 Interfaz web local para configurar, previsualizar y aplicar BrickLayers desde OrcaSlicer.
 
 <img alt="Captura de BrickLayers Web" src="img/bricklayers-web-head.jpg" width="960" align=center>&nbsp;
@@ -196,6 +196,7 @@ Si falta `bricklayers.py`, colócalo junto al script web. Si faltan dependencias
 
 ## Licencia
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+
 BrickLayers Web (`bricklayers_web.py`) se distribuye bajo la GNU General Public License, versión 3 exclusivamente (`GPL-3.0-only`). Consulta [LICENSE](LICENSE) para leer el texto completo.
 
 Puedes utilizar, estudiar, modificar y redistribuir el programa conforme a sus condiciones. Se proporciona sin garantía, en los términos establecidos en la licencia.
