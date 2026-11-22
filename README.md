@@ -1,8 +1,24 @@
-# BrickLayers Web
+<img src="bricklayers.png" width=48 height=48 align=right>
 
+# BrickLayers Web
+[<img src="img/bricklayers-lines.svg" width="16">](README.md)
+[![Version: v0.1](https://img.shields.io/badge/Version-v0.1-blue?style=for-the-badge&logo=v)]()
+<a href="https://github.com/pedromxavier/flag-badges">
+    <img src="https://raw.githubusercontent.com/pedromxavier/flag-badges/main/badges/ES.svg" alt="made in ES">
+</a>&nbsp;
 Interfaz web local para configurar, previsualizar y aplicar BrickLayers desde OrcaSlicer.
 
+<img alt="Captura de BrickLayers Web" src="img/bricklayers-web-head.jpg" width="960" align=center>&nbsp;
+
+## Donaciones
+Puedes hacer una aportación en:
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate/?hosted_button_id=TSCH5FJDVYWP6)
+
+Gracias.
+
 ## Proyecto original
+
+<img alt="BrickLayers Original" src="img/bricklayers-org.jpg" width="960" align=center>&nbsp;
 
 Este proyecto se basa en [BrickLayers, de GeekDetour](https://github.com/GeekDetour/BrickLayers), un postprocesador de G-code de capas entrelazadas para PrusaSlicer, OrcaSlicer y Bambu Studio.
 
@@ -15,6 +31,8 @@ El algoritmo de transformación pertenece al proyecto original. `bricklayers_web
 La integración documentada aquí está orientada a OrcaSlicer. La compatibilidad del motor original con otros laminadores no implica que esta interfaz se haya probado con todos ellos.
 
 ## Ventajas de BrickLayers Web
+
+<img alt="Captura de BrickLayers Web" src="img/bricklayers_web_2026-11-22 203135.png" width="960" align=center>&nbsp;
 
 - Revisar el resultado en un visor 3D durante el postprocesado, sin volver a importar manualmente el G-code para cada comprobación.
 - Cambiar la capa inicial, el multiplicador de extrusión y la activación desde «Parámetros».
@@ -177,7 +195,7 @@ En Windows intenta abrir Edge en una ventana de aplicación; si no está disponi
 Si falta `bricklayers.py`, colócalo junto al script web. Si faltan dependencias, instálalas con el Python configurado en el laminador. Si falla el visor, comprueba WebGL, la consola del navegador y los módulos de `static/`. Si el puerto está ocupado, utiliza `--port` con otro valor.
 
 ## Licencia
-
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 BrickLayers Web (`bricklayers_web.py`) se distribuye bajo la GNU General Public License, versión 3 exclusivamente (`GPL-3.0-only`). Consulta [LICENSE](LICENSE) para leer el texto completo.
 
 Puedes utilizar, estudiar, modificar y redistribuir el programa conforme a sus condiciones. Se proporciona sin garantía, en los términos establecidos en la licencia.
