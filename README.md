@@ -42,7 +42,7 @@ python -m pip install Flask Pillow
 
 En sistemas donde corresponda, utiliza `python3` en lugar de `python`.
 
-Estructura orientativa:
+Estructura:
 
 ```text
 BrickLayers/
@@ -52,9 +52,8 @@ BrickLayers/
 ├── LICENSE
 └── static/
     ├── three.module.js
-    ├── controls/
-    │   └── OrbitControls.js
-    └── … módulos adicionales requeridos por Three.js
+    └── controls/
+        └── OrbitControls.js
 ```
 
 ## Configuración en OrcaSlicer
