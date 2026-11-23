@@ -44,6 +44,8 @@ from io import BytesIO
 
 from PIL import Image, UnidentifiedImageError
 
+from thumbnail_fallback import generate_gcode_thumbnail
+
 HERE = Path(__file__).resolve().parent
 BRICKLAYERS = HERE / "bricklayers.py"
 
@@ -149,10 +151,30 @@ def read_declared_layer_count(gcode_bytes):
     count = int(match.group(1))
     return count if count > 0 else None
 
-def parse_gcode(gcode_bytes, max_layers=None):
+def parse_gcode(gcode_bytes, max_layers=None, start_marker=None):
     # max_layers se conserva por compatibilidad.
     # No truncar: necesitamos contar todas las capas.
     text = gcode_bytes.decode("utf-8", errors="replace")
+    def normalize_marker(line):
+        return line.strip().lstrip(";").strip().upper()
+
+    normalized_marker = (
+        normalize_marker(start_marker)
+        if start_marker
+        else None
+    )
+
+    marker_found = (
+        normalized_marker is not None
+        and any(
+            normalize_marker(line) == normalized_marker
+            for line in text.splitlines()
+        )
+    )
+
+    # Sin marcador solicitado, o si no existe, conservar
+    # el comportamiento habitual.
+    collect_geometry = not marker_found
 
     layers_by_z = {}
 
@@ -182,7 +204,18 @@ def parse_gcode(gcode_bytes, max_layers=None):
 
     for raw_line in text.splitlines():
         stats["lines"] += 1
+        if (
+            normalized_marker is not None
+            and normalize_marker(raw_line) == normalized_marker
+        ):
+            collect_geometry = True
 
+            # No conectar recorridos anteriores con la pieza.
+            current_segment = None
+            current_key = None
+
+            continue
+        
         # Leer TYPE antes de eliminar comentarios.
         type_match = TYPE_RE.search(raw_line)
 
@@ -310,6 +343,11 @@ def parse_gcode(gcode_bytes, max_layers=None):
         )
 
         if deposited_e <= 1e-9 or xy_length <= 1e-9:
+            current_segment = None
+            current_key = None
+            continue
+
+        if not collect_geometry:
             current_segment = None
             current_key = None
             continue
@@ -710,7 +748,7 @@ button:disabled {
   <div id="thumbnailPreview" hidden>
     <img
       id="thumbnailImage"
-      alt="Vista previa del modelo incluida en el G-code"
+      alt="Miniatura del modelo o vista isométrica de los recorridos"
       draggable="false"
     >
   </div>
@@ -1699,6 +1737,7 @@ THUMBNAIL_END_RE = re.compile(
 THUMBNAIL_CACHE = {
     "source": None,
     "png": None,
+    "kind": None,
 }
 
 THUMBNAIL_LOCK = threading.Lock()
@@ -1927,10 +1966,39 @@ def thumbnail():
 
     with THUMBNAIL_LOCK:
         if THUMBNAIL_CACHE["source"] is not source:
-            THUMBNAIL_CACHE["png"] = extract_best_thumbnail(source)
+            # Primera opción: imagen incluida por el laminador.
+            png = extract_best_thumbnail(source)
+            thumbnail_kind = "embedded"
+
+            # Alternativa: generar una vista de deposición XY.
+            if png is None:
+                png = generate_gcode_thumbnail(
+                    source,
+                    parser=lambda gcode: parse_gcode(
+                        gcode,
+                        start_marker="; START_PRINT_BRICKLAYER",
+                        ),
+                    size=(600, 400),
+                    max_segments=120000,
+                )
+
+                thumbnail_kind = (
+                    "generated-isometric"
+                    if png is not None
+                    else "unavailable"
+                )
+
+            THUMBNAIL_CACHE["png"] = png
+            THUMBNAIL_CACHE["kind"] = thumbnail_kind
+
+            # Actualizar la referencia después de completar el trabajo.
             THUMBNAIL_CACHE["source"] = source
 
         png = THUMBNAIL_CACHE["png"]
+        thumbnail_kind = THUMBNAIL_CACHE.get(
+            "kind",
+            "embedded",
+        )
 
     if png is None:
         return "", 204
@@ -1941,7 +2009,9 @@ def thumbnail():
         download_name="thumbnail.png",
         max_age=0,
     )
+
     response.headers["Cache-Control"] = "no-store"
+    response.headers["X-Thumbnail-Source"] = thumbnail_kind
 
     return response
 
