@@ -39,7 +39,7 @@ La integración documentada aquí está orientada a OrcaSlicer. La compatibilida
 - Regenerar la previsualización al cambiar los ajustes.
 - Mostrar u ocultar paredes internas originales, recorridos BrickLayers y otras extrusiones.
 - Inspeccionar el modelo hasta una altura mediante el deslizador vertical, con número de capa, total y coordenada Z.
-- Consultar una miniatura incluida en el G-code, cuando está disponible y es compatible.
+- Consultar una miniatura incluida en el G-code, cuando está disponible y es compatible. Si no está disponible, genera una miniatura a partir del G-code.
 - Aplicar el resultado y continuar en OrcaSlicer mediante «Aplicar y cerrar».
 - Devolver el G-code original sin el efecto BrickLayers cuando se desactiva el procesamiento.
 
@@ -48,7 +48,7 @@ La integración documentada aquí está orientada a OrcaSlicer. La compatibilida
 - Python 3.
 - Flask y Pillow.
 - Navegador con WebGL.
-- `bricklayers.py` junto a `bricklayers_web.py`.
+- `bricklayers.py` y `thumbnail_fallback.py` junto a `bricklayers_web.py`.
 - Recursos locales de Three.js en `static/`, con sus dependencias y rutas relativas. Todos deben corresponder a una misma versión.
 - G-code de texto, no binario.
 
@@ -66,6 +66,7 @@ Estructura:
 BrickLayers/
 ├── bricklayers.py
 ├── bricklayers_web.py
+├── thumbnail_fallback.py
 ├── README.md
 ├── LICENSE
 └── static/
